@@ -1,7 +1,7 @@
 # Gestion du Patrimoine Touristique de la Commune de Ziguinchor
 
 Application monolithique Spring Boot + Thymeleaf + MySQL, conforme au rapport
-UML final (Mame Khoudia GUEYE, 202301148) : 5 acteurs avec héritage depuis
+UML final (Mame Khoudia GUEYE, ) : 5 acteurs avec héritage depuis
 Utilisateur (Visiteur, Conservateur, Opérateur touristique, Administrateur
 communal, Super administrateur).
 
