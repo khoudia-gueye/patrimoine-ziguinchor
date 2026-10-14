@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: pageHead('Proposer un circuit')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container my-5" style="max-width: 600px;">
+    <h2 class="mb-4">Proposer un circuit</h2>
+
+    <form th:action="@{/circuits/enregistrer}" th:object="${circuit}" method="post">
+        <div class="mb-3">
+            <label class="form-label">Nom du circuit</label>
+            <input type="text" th:field="*{nom}" class="form-control" placeholder="ex: Circuit Naturel Ziguinchor"/>
+            <div class="text-danger" th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}"></div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea th:field="*{description}" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Durée (jours)</label>
+                <input type="number" th:field="*{dureeJours}" class="form-control" min="1"/>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Prix (FCFA)</label>
+                <input type="number" step="any" th:field="*{prix}" class="form-control"/>
+                <div class="text-danger" th:if="${#fields.hasErrors('prix')}" th:errors="*{prix}"></div>
+            </div>
+        </div>
+        <p class="text-muted small">Le circuit sera créé en brouillon. Tu pourras le publier depuis "Mes circuits".</p>
+        <button type="submit" class="btn btn-success">Créer le circuit</button>
+        <a th:href="@{/circuits/mes-circuits}" class="btn btn-outline-secondary">Annuler</a>
+    </form>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

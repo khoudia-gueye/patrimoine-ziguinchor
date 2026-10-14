@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: pageHead('Connexion')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container my-5" style="max-width: 480px;">
+    <h2 class="mb-4">Connexion</h2>
+
+    <div class="alert alert-success" th:if="${param.inscription}">Compte créé avec succès ! Tu peux maintenant te connecter.</div>
+    <div class="alert alert-danger" th:if="${param.error}">Email ou mot de passe incorrect.</div>
+    <div class="alert alert-info" th:if="${param.logout}">Vous avez été déconnecté.</div>
+
+    <form th:action="@{/login}" method="post">
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" name="username" class="form-control" required autofocus/>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Mot de passe</label>
+            <input type="password" name="password" class="form-control" required/>
+        </div>
+        <button type="submit" class="btn btn-success">Se connecter</button>
+        <a th:href="@{/register}" class="btn btn-outline-secondary">Créer un compte</a>
+    </form>
+
+    <hr/>
+    <p class="text-muted small mb-1">Comptes de test (mot de passe : <strong>admin123</strong> pour tous) :</p>
+    <ul class="text-muted small">
+        <li>Visiteur : visiteur@ziguinchor.sn</li>
+        <li>Conservateur : conservateur@ziguinchor.sn</li>
+        <li>Opérateur touristique : operateur@ziguinchor.sn</li>
+        <li>Administrateur communal : admincommunal@ziguinchor.sn</li>
+        <li>Super admin : superadmin@ziguinchor.sn</li>
+    </ul>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: pageHead('Circuits')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Circuits touristiques</h2>
+        <a sec:authorize="hasRole('OPERATEUR_TOURISTIQUE')" th:href="@{/circuits/nouveau}" class="btn btn-success">+ Proposer un circuit</a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4" th:each="circuit : ${circuits}">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${circuit.nom}">Nom du circuit</h5>
+                    <p th:text="${circuit.description}">Description</p>
+                    <p class="mb-1">Durée : <strong th:text="${circuit.dureeJours}">1</strong> jour(s)</p>
+                    <p class="mb-1">Prix : <strong th:text="${circuit.prix} + ' FCFA'">0 FCFA</strong></p>
+                    <p class="text-muted small" th:if="${circuit.operateur}">Proposé par <span th:text="${circuit.operateur.nom}">Opérateur</span></p>
+                </div>
+            </div>
+        </div>
+        <div th:if="${#lists.isEmpty(circuits)}" class="col-12 text-center text-muted py-5">Aucun circuit publié pour le moment.</div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

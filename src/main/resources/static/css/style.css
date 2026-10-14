@@ -1,0 +1,29 @@
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f7f9f7;
+}
+
+.card {
+    transition: transform 0.15s ease-in-out;
+    border: none;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+}
+
+.navbar-brand {
+    font-size: 1.3rem;
+}
+
+header.bg-success {
+    background: linear-gradient(135deg, #1e7e34, #28a745) !important;
+}
+
+table.table thead {
+    font-weight: 600;
+}
+
+footer small {
+    opacity: 0.85;
+}

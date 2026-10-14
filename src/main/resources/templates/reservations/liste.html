@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: pageHead('Mes réservations')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container my-5">
+    <h2 class="mb-4">Mes réservations</h2>
+
+    <div class="alert alert-success" th:if="${messageSucces}" th:text="${messageSucces}"></div>
+
+    <div class="row g-4">
+        <div class="col-md-4" th:each="r : ${reservations}">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title" th:text="${r.visite.site.nom}">Site</h5>
+                    <p class="text-muted" th:text="${#temporals.format(r.visite.dateHeureDebut, 'dd/MM/yyyy à HH:mm')}">Date</p>
+
+                    <span class="badge" th:classappend="${r.statut.name() == 'CONFIRME'} ? 'bg-success' : 'bg-secondary'" th:text="${r.statut}">Statut</span>
+
+                    <p class="mt-2 mb-0" th:if="${r.montant != null and r.montant > 0}">
+                        Montant : <strong th:text="${r.montant} + ' FCFA'">0 FCFA</strong>
+                    </p>
+
+                    <div class="my-3" th:if="${r.statut.name() == 'CONFIRME'}">
+                        <img th:src="'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + ${r.qrCodeHash}"
+                             alt="QR code du ticket" class="img-fluid"/>
+                        <p class="small text-muted mt-1" th:text="${r.qrCodeHash}">code</p>
+                    </div>
+
+                    <form th:if="${r.statut.name() == 'CONFIRME'}" th:action="@{/reservations/annuler/{id}(id=${r.id})}" method="post">
+                        <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Annuler cette réservation ?');">Annuler la réservation</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${#lists.isEmpty(reservations)}" class="col-12 text-center text-muted py-5">
+            Tu n'as aucune réservation pour le moment.
+            <br/>
+            <a th:href="@{/visites}" class="btn btn-success btn-sm mt-2">Voir les visites disponibles</a>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

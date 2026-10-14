@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: pageHead('Accueil')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<header class="bg-success bg-gradient text-white text-center py-5 mb-4">
+    <div class="container">
+        <h1 class="display-5 fw-bold">Découvrez le patrimoine touristique de Ziguinchor</h1>
+        <p class="lead">Sites culturels, naturels, religieux et historiques de la Casamance</p>
+
+        <form th:action="@{/}" method="get" class="d-flex justify-content-center mt-4">
+            <input type="text" name="recherche" th:value="${recherche}" class="form-control w-50 me-2"
+                   placeholder="Rechercher un site (ex: Cathédrale, marché...)"/>
+            <button type="submit" class="btn btn-light">Rechercher</button>
+        </form>
+    </div>
+</header>
+
+<main class="container mb-5">
+
+    <div class="mb-3">
+        <span class="fw-semibold">Filtrer par catégorie :</span>
+        <a th:href="@{/}" class="badge bg-secondary text-decoration-none">Toutes</a>
+        <a th:each="cat : ${categories}"
+           th:href="@{/sites(categorie=${cat.id})}"
+           th:text="${cat.nom}"
+           class="badge bg-success text-decoration-none ms-1">Catégorie</a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4" th:each="site : ${sites}">
+            <div class="card h-100 shadow-sm">
+                <img th:if="${site.imageUrl}" th:src="${site.imageUrl}" class="card-img-top" style="height:180px; object-fit:contain; background-color:#f0f0f0;" alt="Image du site"/>
+                <div th:unless="${site.imageUrl}" class="bg-light d-flex align-items-center justify-content-center" style="height:180px;">
+                    <span class="text-muted">Pas d'image</span>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${site.nom}">Nom du site</h5>
+                    <p class="card-text text-muted" th:text="${site.quartier}">Quartier</p>
+                    <span class="badge bg-success" th:if="${site.categorie}" th:text="${site.categorie.nom}">Catégorie</span>
+                    <p class="mt-2" th:text="${#strings.abbreviate(site.description, 100)}">Description courte...</p>
+                </div>
+                <div class="card-footer bg-white border-0">
+                    <a th:href="@{/sites/{id}(id=${site.id})}" class="btn btn-success btn-sm">Voir le détail</a>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${#lists.isEmpty(sites)}" class="col-12 text-center text-muted py-5">
+            Aucun site touristique trouvé.
+        </div>
+    </div>
+
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

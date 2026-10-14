@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: pageHead('Mes circuits')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Mes circuits</h2>
+        <a th:href="@{/circuits/nouveau}" class="btn btn-success">+ Proposer un circuit</a>
+    </div>
+
+    <table class="table table-striped align-middle">
+        <thead class="table-success">
+        <tr><th>Nom</th><th>Durée</th><th>Prix</th><th>Statut</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="circuit : ${circuits}">
+            <td th:text="${circuit.nom}">Nom</td>
+            <td th:text="${circuit.dureeJours} + ' jour(s)'">Durée</td>
+            <td th:text="${circuit.prix} + ' FCFA'">Prix</td>
+            <td>
+                <span class="badge" th:classappend="${circuit.statut.name() == 'PUBLIE'} ? 'bg-success' : 'bg-secondary'" th:text="${circuit.statut}">Statut</span>
+            </td>
+            <td>
+                <form th:if="${circuit.statut.name() == 'BROUILLON'}" th:action="@{/circuits/publier/{id}(id=${circuit.id})}" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-sm btn-outline-success">Publier</button>
+                </form>
+                <a th:href="@{/circuits/supprimer/{id}(id=${circuit.id})}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Supprimer ce circuit ?');">Supprimer</a>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(circuits)}"><td colspan="5" class="text-center text-muted">Tu n'as encore créé aucun circuit.</td></tr>
+        </tbody>
+    </table>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

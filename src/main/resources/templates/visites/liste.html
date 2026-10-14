@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: pageHead('Visites')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Visites guidées à venir</h2>
+        <a sec:authorize="hasRole('OPERATEUR_TOURISTIQUE')" th:href="@{/visites/planifier}" class="btn btn-success">+ Planifier une visite</a>
+    </div>
+
+    <div class="alert alert-warning" th:if="${messagePatience}" th:text="${messagePatience}"></div>
+
+    <div class="row g-4">
+        <div class="col-md-4" th:each="visite : ${visites}">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${visite.site.nom}">Site</h5>
+                    <p class="text-muted mb-1" th:text="${#temporals.format(visite.dateHeureDebut, 'dd/MM/yyyy à HH:mm')}">Date</p>
+                    <p class="mb-1">
+                        <span th:if="${visite.guide != null and !visite.guide.isEmpty()}">Guide : <strong th:text="${visite.guide}">Nom</strong></span>
+                        <span th:if="${visite.guide == null or visite.guide.isEmpty()}" class="text-muted">Aucun guide assigné</span>
+                    </p>
+                    <p class="mb-1" th:if="${visite.circuit}">
+                        Circuit : <span class="badge bg-info text-dark" th:text="${visite.circuit.nom}">Circuit</span>
+                    </p>
+                    <p class="mb-2">Durée : <span th:text="${visite.dureeMinutes}">60</span> min</p>
+
+                    <span th:if="${!visite.complete}" class="badge bg-success" th:text="${visite.placesDisponibles} + ' place(s) disponible(s)'">Places</span>
+                    <span th:if="${visite.complete}" class="badge bg-danger">Complet</span>
+                </div>
+                <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center">
+                    <form sec:authorize="hasRole('VISITEUR')" th:action="@{/reservations/reserver/{id}(id=${visite.id})}" method="post">
+                        <button type="submit" class="btn btn-success btn-sm" th:disabled="${visite.complete}">
+                            <span th:text="${visite.complete} ? 'Complet' : 'Réserver'">Réserver</span>
+                        </button>
+                    </form>
+                    <a sec:authorize="hasRole('OPERATEUR_TOURISTIQUE')" th:href="@{/visites/supprimer/{id}(id=${visite.id})}" class="btn btn-outline-danger btn-sm"
+                       onclick="return confirm('Supprimer cette visite ?');">Supprimer</a>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${#lists.isEmpty(visites)}" class="col-12 text-center text-muted py-5">Aucune visite planifiée pour le moment.</div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

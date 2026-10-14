@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: pageHead('Formulaire site')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container my-5" style="max-width: 700px;">
+    <h2 th:text="${site.id == null ? 'Ajouter un site touristique' : 'Modifier le site'}">Formulaire</h2>
+
+    <form th:action="@{/sites/enregistrer}" th:object="${site}" method="post" class="mt-4">
+        <input type="hidden" th:field="*{id}"/>
+
+        <div class="mb-3">
+            <label class="form-label">Nom du site</label>
+            <input type="text" th:field="*{nom}" class="form-control" placeholder="ex: Cathédrale Saint Antoine"/>
+            <div class="text-danger" th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea th:field="*{description}" class="form-control" rows="4" placeholder="Décrire le site..."></textarea>
+            <div class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Quartier</label>
+                <input type="text" th:field="*{quartier}" class="form-control" placeholder="ex: Boucotte, Kandé..."/>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Adresse</label>
+                <input type="text" th:field="*{adresse}" class="form-control"/>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Catégorie</label>
+            <select th:field="*{categorie}" class="form-select">
+                <option value="">-- Choisir une catégorie --</option>
+                <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.nom}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">URL de l'image (optionnel)</label>
+            <input type="text" th:field="*{imageUrl}" class="form-control" placeholder="https://..."/>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Latitude (optionnel)</label>
+                <input type="number" step="any" th:field="*{latitude}" class="form-control"/>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Longitude (optionnel)</label>
+                <input type="number" step="any" th:field="*{longitude}" class="form-control"/>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">Enregistrer</button>
+        <a th:href="@{/sites}" class="btn btn-outline-secondary">Annuler</a>
+    </form>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

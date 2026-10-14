@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: pageHead('Sites touristiques')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Tous les sites touristiques</h2>
+        <a sec:authorize="hasRole('CONSERVATEUR')" th:href="@{/sites/nouveau}" class="btn btn-success">+ Nouveau site</a>
+    </div>
+
+    <table class="table table-striped table-hover align-middle">
+        <thead class="table-success">
+        <tr>
+            <th>Nom</th><th>Quartier</th><th>Catégorie</th><th>Note moyenne</th><th>Date d'ajout</th><th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="site : ${sites}">
+            <td th:text="${site.nom}">Nom</td>
+            <td th:text="${site.quartier}">Quartier</td>
+            <td th:text="${site.categorie != null ? site.categorie.nom : '-'}">Catégorie</td>
+            <td th:text="${#numbers.formatDecimal(site.noteMoyenne, 1, 1)} + ' / 5'">0 / 5</td>
+            <td th:text="${site.dateAjout}">Date</td>
+            <td>
+                <a th:href="@{/sites/{id}(id=${site.id})}" class="btn btn-sm btn-outline-success">Voir</a>
+                <a sec:authorize="hasRole('CONSERVATEUR')" th:href="@{/sites/modifier/{id}(id=${site.id})}" class="btn btn-sm btn-outline-primary">Modifier</a>
+                <a sec:authorize="hasRole('CONSERVATEUR')" th:href="@{/sites/supprimer/{id}(id=${site.id})}" class="btn btn-sm btn-outline-danger"
+                   onclick="return confirm('Confirmer la suppression de ce site ?');">Supprimer</a>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(sites)}">
+            <td colspan="6" class="text-center text-muted">Aucun site enregistré.</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

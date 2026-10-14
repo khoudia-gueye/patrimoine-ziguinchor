@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: pageHead('Formulaire catégorie')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container my-5" style="max-width: 600px;">
+    <h2 th:text="${categorie.id == null ? 'Ajouter une catégorie' : 'Modifier la catégorie'}">Formulaire</h2>
+
+    <form th:action="@{/categories/enregistrer}" th:object="${categorie}" method="post" class="mt-4">
+        <input type="hidden" th:field="*{id}"/>
+        <div class="mb-3">
+            <label class="form-label">Nom de la catégorie</label>
+            <input type="text" th:field="*{nom}" class="form-control" placeholder="ex: Culturel, Naturel, Religieux..."/>
+            <div class="text-danger" th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}"></div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea th:field="*{description}" class="form-control" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-success">Enregistrer</button>
+        <a th:href="@{/categories}" class="btn btn-outline-secondary">Annuler</a>
+    </form>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

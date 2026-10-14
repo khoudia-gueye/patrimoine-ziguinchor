@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: pageHead('Planifier une visite')}"></head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container my-5" style="max-width: 600px;">
+    <h2 class="mb-4">Planifier une visite</h2>
+
+    <form th:action="@{/visites/enregistrer}" th:object="${visite}" method="post">
+        <div class="mb-3">
+            <label class="form-label">Site touristique</label>
+            <select th:field="*{site}" class="form-select">
+                <option value="">-- Choisir un site --</option>
+                <option th:each="s : ${sites}" th:value="${s.id}" th:text="${s.nom}"></option>
+            </select>
+            <div class="text-danger" th:if="${#fields.hasErrors('site')}" th:errors="*{site}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Circuit associé (optionnel)</label>
+            <select th:field="*{circuit}" class="form-select">
+                <option value="">-- Visite indépendante, hors circuit --</option>
+                <option th:each="c : ${circuits}" th:value="${c.id}" th:text="${c.nom} + ' (' + ${c.prix} + ' FCFA)'"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Nom du guide (optionnel)</label>
+            <input type="text" th:field="*{guide}" class="form-control" placeholder="ex: Moussa Diatta"/>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Date et heure de début</label>
+            <input type="datetime-local" th:field="*{dateHeureDebut}" class="form-control"/>
+            <div class="text-danger" th:if="${#fields.hasErrors('dateHeureDebut')}" th:errors="*{dateHeureDebut}"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Durée (minutes)</label>
+                <input type="number" th:field="*{dureeMinutes}" class="form-control" min="15"/>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Nombre de places</label>
+                <input type="number" th:field="*{placesMax}" class="form-control" min="1"/>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">Planifier</button>
+        <a th:href="@{/visites}" class="btn btn-outline-secondary">Annuler</a>
+    </form>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>
